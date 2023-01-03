@@ -1,23 +1,28 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-bool isVisited[30005];
-int maxCost;
-int costs[30005];
+long long maxCost;
+long long costs[30005];
 void DFS(vector<vector<pair<int,int>>> adjList,int indx){
-    isVisited[indx]=true;
-    int mcost=0;
-    int smcost=0;
+    if(costs[indx]!=-1){
+        return;
+    }
+    costs[indx]=0;
+    long long mcost=0;
+    long long smcost=0;
+    long long cost;
     for(pair<int,int> v : adjList[indx]){
-        if(!isVisited[v.first]){
+        if(costs[v.first]==-1){
             DFS(adjList,v.first);
-            if(mcost<costs[v.first]+v.second){
+            cost = costs[v.first]+v.second;
+            if(mcost<=cost){
                 smcost=mcost;
-                mcost=costs[v.first]+v.second;
-            }else if(smcost<costs[v.first]+v.second){
-                smcost=costs[v.first]+v.second;
+                mcost=cost;
+            }else if(smcost<cost){
+                smcost=cost;
             }
         }
+        costs[v.first]=max(long long(0),cost[v.first]);
     }
     //cout<<mcost<<endl;
     if(maxCost<mcost+smcost){
@@ -26,6 +31,8 @@ void DFS(vector<vector<pair<int,int>>> adjList,int indx){
     costs[indx]=mcost;
 }
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
     int T;
     cin>>T;
     for(int tc=1;tc<=T;tc++){
@@ -33,14 +40,12 @@ int main(){
         cin>>N;
         vector<vector<pair<int,int>>> adjList(N,vector<pair<int,int>>());
         int u,v,w;
-        isVisited[0]=false;
-        costs[0]=0;
+        costs[0]=-1;
         for(int i=1;i<N;i++){
             cin>>u>>v>>w;
             adjList[u].push_back(make_pair(v,w));
             adjList[v].push_back(make_pair(u,w));
-            isVisited[i]=false;
-            costs[i]=0;
+            costs[i]=-1;
         }maxCost=0;
 
         DFS(adjList,0);

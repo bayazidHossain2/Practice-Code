@@ -4,7 +4,7 @@
 #include<algorithm>
 using namespace std;
 int main(){
-    freopen("001output.txt","w",stdout);
+    //freopen("001output.txt","w",stdout);
     int T;
     cin>>T;
     while(T--){
